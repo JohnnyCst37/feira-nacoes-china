@@ -113,6 +113,7 @@
       - Adicionados os arquivos e feito o primeiro commit local na branch `main`.
     - **Acesso Administrativo (Super Admin)**:
       - Adicionado o e-mail `fernandesjohnnys@gmail.com` na lista de administradores do [AuthContext.tsx](file:///c:/Projetos/feira-nacoes/src/context/AuthContext.tsx) para dar acesso de Super Admin ao painel do Professor Johnny no ambiente real e mock.
+      - Corrigido o bug de sensibilidade de caso (case-sensitivity) na verificação de admin, normalizando o e-mail retornado pelo Firebase para minúsculas (`toLowerCase()`) antes da comparação.
 
 ---
 

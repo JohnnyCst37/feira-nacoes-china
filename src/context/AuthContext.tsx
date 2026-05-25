@@ -36,11 +36,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Escuta estado real do Firebase Auth
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
+          const userEmail = firebaseUser.email?.toLowerCase() || '';
           setUser({
             uid: firebaseUser.uid,
             displayName: firebaseUser.displayName,
             email: firebaseUser.email,
-            isAdmin: firebaseUser.email?.endsWith('@escola.mt.gov.br') || firebaseUser.email === 'professor@gmail.com' || firebaseUser.email === 'fernandesjohnnys@gmail.com' // regra simples de admin
+            isAdmin: userEmail.endsWith('@escola.mt.gov.br') || userEmail === 'professor@gmail.com' || userEmail === 'fernandesjohnnys@gmail.com'
           });
         } else {
           setUser(null);
