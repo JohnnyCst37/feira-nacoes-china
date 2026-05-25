@@ -15,7 +15,7 @@ export default function Home() {
   const [mockName, setMockName] = useState('');
   const [mockEmail, setMockEmail] = useState('');
 
-  const { user, loginWithGoogle, loginWithMock, isMock } = useAuth();
+  const { user, loginWithGoogle, loginWithMock, isMock, logout } = useAuth();
   const navigate = useNavigate();
 
   const [isMuted, setIsMuted] = useState(true);
@@ -41,16 +41,7 @@ export default function Home() {
     }
   };
 
-  // Se já estiver logado, redireciona
-  useEffect(() => {
-    if (user) {
-      if (user.isAdmin) {
-        navigate('/admin');
-      } else {
-        navigate('/trilha');
-      }
-    }
-  }, [user, navigate]);
+  // Redirecionamento automático removido para permitir a livre visualização da Home pelo administrador e alunos logados
 
   useEffect(() => {
     const timer1 = setTimeout(() => setStage('dragon'), 5000);
@@ -175,7 +166,32 @@ export default function Home() {
               </div>
             )}
 
-            {!showMockForm ? (
+            {user ? (
+              <div className="space-y-5 animate-scale-up">
+                <div className="text-zinc-300 text-sm font-sans space-y-1">
+                  <p>Olá, <span className="text-chinese-gold font-bold">{user.displayName || 'Viajante'}</span>!</p>
+                  <p className="text-xs text-zinc-400">Você já está identificado na jornada.</p>
+                </div>
+                
+                <button
+                  onClick={() => navigate(user.isAdmin ? '/admin' : '/trilha')}
+                  className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-chinese-gold to-yellow-600 hover:from-yellow-500 hover:to-chinese-gold text-black py-3.5 px-6 rounded-xl font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(255,215,0,0.25)] active:scale-95"
+                >
+                  <Compass className="w-5 h-5 animate-spin-slow" />
+                  <span>{user.isAdmin ? "Ir para o Painel do Professor" : "Acessar a Trilha do Quiz"}</span>
+                </button>
+
+                <button
+                  onClick={async () => {
+                    await logout();
+                    setShowMockForm(false);
+                  }}
+                  className="text-[10px] text-zinc-550 hover:text-red-400 transition font-mono uppercase tracking-widest block mx-auto pt-2 hover:underline"
+                >
+                  Sair / Entrar com outra conta 🚪
+                </button>
+              </div>
+            ) : !showMockForm ? (
               <div className="space-y-4">
                 <button
                   onClick={handleLoginClick}
@@ -187,7 +203,7 @@ export default function Home() {
                 </button>
 
                 {isMock && (
-                  <p className="text-[10px] text-zinc-500 font-mono">
+                  <p className="text-[10px] text-zinc-550 font-mono">
                     ℹ️ Modo Mock Ativo (Sem credenciais de banco)
                   </p>
                 )}

@@ -116,6 +116,9 @@
       - Corrigido o bug de sensibilidade de caso (case-sensitivity) na verificação de admin, normalizando o e-mail retornado pelo Firebase para minúsculas (`toLowerCase()`) antes da comparação.
     - **Compatibilidade de Dependências na Vercel**:
       - Criado o arquivo `.npmrc` na raiz do projeto contendo `legacy-peer-deps=true`, garantindo que o servidor de compilação da Vercel instale as dependências ignorando conflitos do React 19 com o Lucide React.
+    - **Melhoria de Navegação na Home (Admin/Alunos)**:
+      - Removido o redirecionamento automático rígido do `useEffect` ao carregar a página inicial (Home.tsx), permitindo que o administrador e estudantes acessem a Home livremente mesmo estando logados.
+      - Adicionado card de identificação e botões de atalho no lugar do formulário de login na Home, permitindo continuar a trilha, ir ao Painel do Professor (caso Admin) ou deslogar de forma intuitiva.
 
 ---
 
