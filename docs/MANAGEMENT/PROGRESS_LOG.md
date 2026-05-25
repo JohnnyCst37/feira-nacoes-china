@@ -114,6 +114,8 @@
     - **Acesso Administrativo (Super Admin)**:
       - Adicionado o e-mail `fernandesjohnnys@gmail.com` na lista de administradores do [AuthContext.tsx](file:///c:/Projetos/feira-nacoes/src/context/AuthContext.tsx) para dar acesso de Super Admin ao painel do Professor Johnny no ambiente real e mock.
       - Corrigido o bug de sensibilidade de caso (case-sensitivity) na verificação de admin, normalizando o e-mail retornado pelo Firebase para minúsculas (`toLowerCase()`) antes da comparação.
+    - **Compatibilidade de Dependências na Vercel**:
+      - Criado o arquivo `.npmrc` na raiz do projeto contendo `legacy-peer-deps=true`, garantindo que o servidor de compilação da Vercel instale as dependências ignorando conflitos do React 19 com o Lucide React.
 
 ---
 
