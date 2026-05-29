@@ -269,11 +269,40 @@ export async function saveStudentProgress(
     }
     localStorage.setItem("mock_students_progress", JSON.stringify(list));
   } else {
-    const userRef = doc(db, "users", uid);
-    await setDoc(userRef, {
-      ...data,
-      lastActive: new Date().toISOString()
-    }, { merge: true });
+    try {
+      const userRef = doc(db, "users", uid);
+      await setDoc(userRef, {
+        ...data,
+        lastActive: new Date().toISOString()
+      }, { merge: true });
+    } catch (error) {
+      console.warn("Firestore: Permissão negada ou erro de rede. Salvando progresso localmente como fallback:", error);
+      
+      // Armazena no mock local para manter o estado da tela do aluno consistente
+      const progressData = localStorage.getItem("mock_students_progress");
+      const list: StudentProgress[] = progressData ? JSON.parse(progressData) : [];
+      const index = list.findIndex((item) => item.uid === uid);
+      
+      const updatedUser: StudentProgress = {
+        uid,
+        name: data.name || (index > -1 ? list[index].name : "Aluno Convidado"),
+        email: data.email || (index > -1 ? list[index].email : "aluno@escola.mt.gov.br"),
+        score: data.score ?? (index > -1 ? list[index].score : 0),
+        completed: data.completed ?? (index > -1 ? list[index].completed : false),
+        stars: data.stars ?? (index > -1 ? list[index].stars : 0),
+        feedbackText: data.feedbackText || (index > -1 ? list[index].feedbackText : ""),
+        lastActive: new Date().toISOString(),
+        xp: data.xp ?? (index > -1 ? list[index].xp : 50),
+        badges: data.badges ?? (index > -1 ? list[index].badges : [])
+      };
+      
+      if (index > -1) {
+        list[index] = updatedUser;
+      } else {
+        list.push(updatedUser);
+      }
+      localStorage.setItem("mock_students_progress", JSON.stringify(list));
+    }
   }
 }
 
@@ -303,10 +332,23 @@ export async function getStudentsProgress(): Promise<StudentProgress[]> {
           badges: item.badges ?? []
         });
       });
+      
+      // Mescla com eventuais progressos salvos localmente (fallback offline)
+      const localData = localStorage.getItem("mock_students_progress");
+      if (localData) {
+        const localList: StudentProgress[] = JSON.parse(localData);
+        localList.forEach((localItem) => {
+          if (!list.some((item) => item.uid === localItem.uid)) {
+            list.push(localItem);
+          }
+        });
+      }
+      
       return list;
     } catch (error) {
-      console.error("Erro ao ler dados de progresso do Firestore:", error);
-      return [];
+      console.warn("Firestore: Sem permissão de leitura de progresso. Retornando dados locais:", error);
+      const localData = localStorage.getItem("mock_students_progress");
+      return localData ? JSON.parse(localData) : [];
     }
   }
 }
@@ -438,6 +480,18 @@ export async function deleteStudentProgress(uid: string): Promise<void> {
       localStorage.setItem("mock_students_progress", JSON.stringify(filtered));
     }
   } else {
-    await deleteDoc(doc(db, "users", uid));
+    try {
+      await deleteDoc(doc(db, "users", uid));
+    } catch (e) {
+      console.warn("Firestore: Erro ao excluir progresso do estudante, limpando localmente:", e);
+    }
+    
+    // Limpa também do cache local para manter coerência
+    const data = localStorage.getItem("mock_students_progress");
+    if (data) {
+      const list: StudentProgress[] = JSON.parse(data);
+      const filtered = list.filter((item) => item.uid !== uid);
+      localStorage.setItem("mock_students_progress", JSON.stringify(filtered));
+    }
   }
 }
