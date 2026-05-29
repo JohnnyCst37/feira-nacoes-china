@@ -50,7 +50,7 @@ service cloud.firestore {
         request.auth.uid == userId ||
         request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
         request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
-      )) || userId.startsWith('anon-') || userId.startsWith('mock-');
+      )) || userId.matches('^anon-.*') || userId.matches('^mock-.*');
     }
   }
 }
