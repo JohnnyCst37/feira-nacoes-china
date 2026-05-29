@@ -120,8 +120,8 @@
       - Removido o redirecionamento automático rígido do `useEffect` ao carregar a página inicial (Home.tsx), permitindo que o administrador e estudantes acessem a Home livremente mesmo estando logados.
       - Adicionado card de identificação e botões de atalho no lugar do formulário de login na Home, permitindo continuar a trilha, ir ao Painel do Professor (caso Admin) ou deslogar de forma intuitiva.
 
-### [2026-05-28] Trilha Sonora Global & Controle de Volume (Fase 4 - Melhoria)
-- **Tarefa**: Adicionar link MP3 personalizado e ajuste de volume para a trilha de fundo.
+### [2026-05-28] Trilha Sonora Global, Captura de Alunos & Exclusão (Fase 4 - Melhoria)
+- **Tarefa**: Adicionar link MP3 personalizado, volume global, capturar dados de e-mail e permitir exclusão de alunos.
   - *Status*: Concluído.
   - *Ações*:
     - Adicionado suporte a `AppSettings` (Firestore e LocalStorage) e criados os métodos getter/setter de volume dinâmico em `audio.ts`.
@@ -129,6 +129,8 @@
     - Atualizada a página inicial (`Home.tsx`) para puxar as configurações de áudio diretamente do banco de dados no ciclo de vida e aplicar o volume exato do professor.
     - **Melhoria de Reprodução Contínua**: Removida a interrupção da música ao entrar na Trilha (`Trilha.tsx`). A música de fundo agora toca continuamente e só pausa automaticamente se houver um vídeo em reprodução (como a apresentação dos alunos) ou se o estudante estiver no quiz de ouvido da Estação 3 (para não sobrepor o som dos instrumentos). Ao fechar o vídeo ou encerrar o desafio, a música de fundo é retomada automaticamente no volume definido.
     - **Correção de Permissões (Leitura Pública)**: Removidas as operações de auto-gravação (`setDoc`) de dentro das funções de leitura pública (`getQuestions`, `getRewardVideos`, `getStationConfigs` e `getAppSettings`) em [db.ts](file:///c:/Projetos/feira-nacoes/src/lib/db.ts). Isso impede que visitantes não autenticados tentem realizar escritas involuntárias ao carregar a página inicial, eliminando de vez os erros de `Missing or insufficient permissions` do Firestore.
+    - **Captura Completa de Alunos**: Corrigida a lógica de sincronização do progresso dos alunos no Firestore (`Trilha.tsx`). Agora o app cria o registro inicial com `name` e `email` imediatamente no carregamento da trilha e os envia em todas as atualizações de XP, evitando que fiquem cadastrados como "Aluno Desconhecido" com e-mail em branco no painel.
+    - **Exclusão de Usuários no Painel**: Implementada a coluna de "Ações" na tabela de Acompanhamento dos Alunos (`Admin.tsx`) contendo um botão de lixeira (ícone `Trash2`). O professor Johnny agora pode excluir o progresso de qualquer aluno do banco de dados (Firestore/Mock) em tempo real após uma janela de confirmação nativa.
     - Executado build de validação com 100% de sucesso.
 
 ---
