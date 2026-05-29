@@ -148,7 +148,7 @@ const defaultQuestions: QuestionCard[] = [
     pergunta: "Durante as comemorações de rua no Brasil, como o Ano Novo Chinês em SP, a Dança do Dragão é conduzida pelos dançarinos seguindo qual elemento orbital?",
     opcoes: ["Uma pérola de sabedoria flutuante", "O mastro imperial", "O tambor da noite", "A bandeira da dinastia"],
     resposta_correta: "Uma pérola de sabedoria flutuante",
-    video_feedback_url: "https://www.youtube.com/embed/nU2Wos-v680",
+    video_feedback_url: "https://www.youtube.com/embed/l0hIU89jJN8",
     texto_explicativo: "Na tradicional Dança do Dragão, os intérpretes sustentam o dragão sobre varas e correm imitando movimentos ondulados e serpenteantes, engajados na perseguição dramática de uma Esfera/Pérola que representa sabedoria e luz espiritual."
   },
   {
@@ -168,7 +168,7 @@ const defaultRewardVideos = [
   "https://www.youtube.com/embed/RkL6n327SIs", // Festival de Outono
   "https://www.youtube.com/embed/z12M1bI06iM", // Rota do Chá
   "https://www.youtube.com/embed/1XaAreqeiI0", // Instrumentos
-  "https://www.youtube.com/embed/nU2Wos-v680"  // Dança do Dragão
+  "https://www.youtube.com/embed/l0hIU89jJN8"  // Dança do Dragão
 ];
 
 // Inicialização do localStorage em modo mock

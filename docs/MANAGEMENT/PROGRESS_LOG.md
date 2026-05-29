@@ -133,13 +133,15 @@
     - **Exclusão de Usuários no Painel**: Implementada a coluna de "Ações" na tabela de Acompanhamento dos Alunos (`Admin.tsx`) contendo um botão de lixeira (ícone `Trash2`). O professor Johnny agora pode excluir o progresso de qualquer aluno do banco de dados (Firestore/Mock) em tempo real após uma janela de confirmação nativa.
     - Executado build de validação com 100% de sucesso.
 
-### [2026-05-29] Resiliência de Vídeos & Correção da Build Vercel (Fase 4 - Melhoria)
-- **Tarefa**: Resolver erro de compilação da build remota, atualizar link do Erhu e adicionar escapes de vídeo externos.
+### [2026-05-29] Resiliência de Vídeos, Link do Dragão & Correção do Mini-game do Pastel (Fase 4 - Melhoria)
+- **Tarefa**: Resolver erro de compilação da build remota, atualizar links de vídeo (Erhu e Dragão), corrigir travamento no mini-game do pastel e adicionar escapes de vídeo externos.
   - *Status*: Concluído.
   - *Ações*:
     - **Correção da Build**: Identificado que o arquivo local `db.ts` contendo a função de exclusão de progresso (`deleteStudentProgress`) não havia sido commitado, quebrando o build da Vercel. Sincronizado e enviado com sucesso.
-    - **Vídeo Padrão de Instrumentos**: Atualizada a URL de feedback de Erhu (Grupo 3 & Estação 3) em `db.ts` para o novo link fornecido pelo professor (`https://www.youtube.com/embed/1XaAreqeiI0`).
-    - **Pré-visualizações no Painel do Professor**: Adicionada área de preview em tempo real (Iframe) no Painel de Admin para a edição de vídeos de feedback (Grupos) e mídias extras da estação (Instrumento A/B), além de incluir um botão rápido para preencher o link padrão sugerido no Grupo 3.
+    - **Vídeo Padrão de Instrumentos**: Atualizada a URL de feedback de Erhu (Grupo 3 & Estação 3) em `db.ts` para o novo link funcional fornecido pelo professor (`https://www.youtube.com/embed/1XaAreqeiI0`).
+    - **Vídeo Padrão do Dragão**: Corrigido o link inexistente da Dança do Dragão (Grupo 4) no banco de dados para o novo link fornecido pelo professor (`https://www.youtube.com/embed/l0hIU89jJN8`).
+    - **Correção de Bug de Congelamento do Pastel (Estação 5)**: Resolvido o travamento sutil no mini-game de fritar pastel. Se o usuário tentasse retirar o pastel no intervalo entre 86% e 99% (queimado), a função `pullPastel` não continha o ramo `else` correspondente, resultando em um estado travado em `'frying'` com o temporizador limpo. Adicionamos a transição adequada para o estado `'burnt'` (queimado), exibindo o botão "Tentar Novamente" e destravando o fluxo de forma segura.
+    - **Pré-visualizações no Painel do Professor**: Adicionada área de preview em tempo real (Iframe) no Painel de Admin para a edição de vídeos de feedback (Grupos) e mídias extras da estação (Instrumento A/B), além de incluir botões rápidos para preencher os links padrão sugeridos no Grupo 3 e no Grupo 4.
     - **Resiliência contra Vídeos Bloqueados para Incorporação**: Implementado um botão/link externo de escape abaixo de todos os players de vídeo no modal de feedback da trilha e na aba do Quiz de Ouvido da Estação 3 (*"Não carregou? Assistir diretamente no YouTube/Drive ↗"*). Caso o criador do vídeo tenha bloqueado embeds (ex: vídeo indisponível), o aluno pode abrir diretamente em tela cheia na plataforma original de forma transparente.
     - **Deploy de Produção**: Commitado e feito push para a branch principal (`main`), restabelecendo a compilação automática bem-sucedida e deploy na Vercel.
 

@@ -538,6 +538,19 @@ export default function Admin() {
                     </div>
                   )}
 
+                  {editingGroupId === 4 && (
+                    <div className="mb-2 bg-red-950/40 border border-yellow-600/20 rounded-xl p-2.5 flex items-center justify-between text-[11px]">
+                      <span className="text-zinc-300 font-serif">Padrão sugerido para Dança do Dragão:</span>
+                      <button
+                        type="button"
+                        onClick={() => setVideoUrl("https://www.youtube.com/watch?v=l0hIU89jJN8")}
+                        className="bg-yellow-600/20 hover:bg-yellow-600/30 text-chinese-gold px-2 py-1 rounded border border-yellow-650/45 transition font-bold active:scale-95"
+                      >
+                        Aplicar Vídeo Padrão 🏮
+                      </button>
+                    </div>
+                  )}
+
                   <input
                     type="url"
                     value={videoUrl}

@@ -530,6 +530,9 @@ export default function Trilha() {
     } else if (pastelFryingProgress < 60) {
       setPastelFryingState('soggy');
       setPastelFryingMsg("💧 Ih, ficou encharcado! Muito pouco tempo no óleo. Tente novamente.");
+    } else {
+      setPastelFryingState('burnt');
+      setPastelFryingMsg("🔥 Ih, queimou! Passou do ponto ideal. Tente novamente!");
     }
   };
 
