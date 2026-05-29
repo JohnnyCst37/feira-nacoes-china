@@ -15,7 +15,7 @@ class AudioController {
       this.bgAudio = new Audio();
       this.bgAudio.loop = true;
       this.bgAudio.volume = this.volume;
-      this.currentUrl = '/audio/traditional_chinese_music.webm';
+      this.currentUrl = '/audio/traditional_chinese_music.mp3';
       this.bgAudio.src = this.currentUrl;
     }
   }
@@ -38,7 +38,7 @@ class AudioController {
     if (!this.bgAudio) return;
     
     // Se a URL for vazia, volta para a música de fundo padrão
-    const targetUrl = url || '/audio/traditional_chinese_music.webm';
+    const targetUrl = url || '/audio/traditional_chinese_music.mp3';
     
     if (this.currentUrl !== targetUrl) {
       this.currentUrl = targetUrl;

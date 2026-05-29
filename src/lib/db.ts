@@ -50,7 +50,7 @@ export interface AppSettings {
 }
 
 const defaultAppSettings: AppSettings = {
-  soundtrackUrl: "/audio/traditional_chinese_music.webm",
+  soundtrackUrl: "/audio/traditional_chinese_music.mp3",
   soundtrackVolume: 0.25
 };
 

@@ -592,7 +592,7 @@ export default function Admin() {
                 <div className="space-y-1">
                   <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">URL da Música (MP3 / WebM)</label>
                   <input
-                    type="url"
+                    type="text"
                     value={soundtrackUrl}
                     onChange={(e) => setSoundtrackUrl(e.target.value)}
                     placeholder="Deixe em branco para o padrão ou cole um link MP3"
@@ -713,7 +713,7 @@ export default function Admin() {
                 <div className="space-y-1">
                   <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">URL da Imagem de Fundo</label>
                   <input
-                    type="url"
+                    type="text"
                     value={stationBgImage}
                     onChange={(e) => setStationBgImage(e.target.value)}
                     placeholder="https://exemplo.com/imagem.jpg"
@@ -724,7 +724,7 @@ export default function Admin() {
                 <div className="space-y-1">
                   <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">URL do Vídeo de Fundo (YouTube/mp4)</label>
                   <input
-                    type="url"
+                    type="text"
                     value={stationBgVideo}
                     onChange={(e) => setStationBgVideo(e.target.value)}
                     placeholder="https://youtube.com/watch?v=..."
@@ -735,7 +735,7 @@ export default function Admin() {
                 <div className="space-y-1">
                   <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">URL da Melodia de Fundo (MP3)</label>
                   <input
-                    type="url"
+                    type="text"
                     value={stationMelody}
                     onChange={(e) => setStationMelody(e.target.value)}
                     placeholder="https://exemplo.com/musica.mp3"
