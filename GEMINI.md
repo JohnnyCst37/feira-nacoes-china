@@ -55,7 +55,6 @@ Os alunos do 7º ano estão expostos a excessos e influências do mundo adulto d
    - Adicionada área de pré-visualização (Iframe) em tempo real no Painel Admin para o professor testar se a incorporação dos vídeos funciona ou se é bloqueada pelo YouTube.
    - Adicionados links de escape amigáveis (*"Não carregou? Assistir diretamente no YouTube/Drive ↗"*) abaixo de todos os players de vídeo na Trilha e no Admin para mitigar erros de indisponibilidade de embed.
    - Atualizada a Estação 3 (Instrumentos) com o vídeo padrão do Erhu fornecido pelo professor (`https://www.youtube.com/embed/1XaAreqeiI0`).
-   - Atualizada a Estação 4 (Dança do Dragão) com o vídeo funcional fornecido pelo professor (`https://www.youtube.com/embed/l0hIU89jJN8`).
+   - Atualizada a Estação 4 (Dança do Dragão) com o vídeo funcional de Wadaiko/Tambores no desafio do ritmo (`https://www.youtube.com/embed/jYFgt-kEIrE`) e o vídeo de feedback do Grupo 4 (`https://www.youtube.com/embed/l0hIU89jJN8`).
 5. **Correção do Fluxo de Fritura do Pastel (Estação 5)**:
    - Corrigido o bug de travamento de estado no mini-game do pastel de feira. Caso o jogador retirasse o pastel no intervalo de queima (> 85%), a falta de um bloco de transição deixava a UI congelada em `'frying'` com o timer limpo. Adicionada a transição correta para o estado `'burnt'` (queimado), permitindo a repetição do mini-game por meio do botão "Tentar Novamente".
-

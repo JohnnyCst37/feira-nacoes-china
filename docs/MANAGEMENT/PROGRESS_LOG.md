@@ -134,11 +134,12 @@
     - Executado build de validação com 100% de sucesso.
 
 ### [2026-05-29] Resiliência de Vídeos, Link do Dragão, 404 de SPA & Fritura do Pastel (Fase 4 - Melhoria)
-- **Tarefa**: Resolver erro de compilação da build remota, atualizar links de vídeo (Erhu e Dragão), corrigir travamento no mini-game do pastel, resolver erros 404 e adicionar escapes de vídeo externos.
+- **Tarefa**: Resolver erro de compilação da build remota, atualizar links de vídeo (Erhu, Tambor e Dragão), corrigir travamento no mini-game do pastel, resolver erros 404 e adicionar escapes de vídeo externos.
   - *Status*: Concluído.
   - *Ações*:
     - **Correção da Build**: Identificado que o arquivo local `db.ts` contendo a função de exclusão de progresso (`deleteStudentProgress`) não havia sido commitado, quebrando o build da Vercel. Sincronizado e enviado com sucesso.
     - **Vídeo Padrão de Instrumentos**: Atualizada a URL de feedback de Erhu (Grupo 3 & Estação 3) em `db.ts` para o novo link funcional fornecido pelo professor (`https://www.youtube.com/embed/1XaAreqeiI0`).
+    - **Vídeo do Desafio do Tambor (Estação 4)**: Atualizado o link do vídeo de fundo em loop do tambor (`Trilha.tsx`) de `nU2Wos-v680` para o novo link funcional de Wadaiko de tambores tradicionais: `https://www.youtube.com/embed/jYFgt-kEIrE`. Adicionado link externo de escape para visualização direta caso dê indisponível.
     - **Vídeo Padrão do Dragão**: Corrigido o link inexistente da Dança do Dragão (Grupo 4) no banco de dados para o novo link fornecido pelo professor (`https://www.youtube.com/embed/l0hIU89jJN8`).
     - **Correção de Bug de Congelamento do Pastel (Estação 5)**: Resolvido o travamento sutil no mini-game de fritar pastel. Se o usuário tentasse retirar o pastel no intervalo entre 86% e 99% (queimado), a função `pullPastel` não continha o ramo `else` correspondente, resultando em um estado travado em `'frying'` com o temporizador limpo. Adicionamos a transição adequada para o estado `'burnt'` (queimado), exibindo o botão "Tentar Novamente" e destravando o fluxo de forma segura.
     - **Resolução de Erro 404 ao Atualizar (SPA Vercel)**: Criado o arquivo `vercel.json` na raiz do projeto contendo as diretrizes de reescrita de rotas para servir `index.html` em qualquer requisição GET de caminhos como `/trilha` ou `/admin`. Isso evita o erro `404: NOT_FOUND` nativo da Vercel ao dar F5 nas rotas internas.
@@ -151,7 +152,6 @@
 ## Próximos Passos
 1. Habilitar o Firebase Console para o projeto de produção real.
 2. Inserir as credenciais do Firebase e a Gemini API Key no painel da Vercel.
-3. Subir e implantar o aplicativo na Vercel para acesso dos visitantes através do QR Code na feira!
 
 
 

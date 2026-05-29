@@ -1665,12 +1665,20 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
                         <div className="relative aspect-video w-full max-w-sm mx-auto bg-black rounded-xl overflow-hidden border border-yellow-600/30 shadow-md">
                           <iframe
                             className="absolute inset-0 w-full h-full pointer-events-none"
-                            src="https://www.youtube.com/embed/nU2Wos-v680?autoplay=1&mute=1&loop=1&playlist=nU2Wos-v680&controls=0"
+                            src="https://www.youtube.com/embed/jYFgt-kEIrE?autoplay=1&mute=1&loop=1&playlist=jYFgt-kEIrE&controls=0"
                             title="Dança do Dragão em Loop"
                             frameBorder="0"
                             allow="autoplay; encrypted-media"
                           ></iframe>
                         </div>
+                        <a
+                          href="https://www.youtube.com/watch?v=jYFgt-kEIrE"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-chinese-gold hover:text-yellow-400 font-bold underline inline-block"
+                        >
+                          Abrir vídeo original ↗
+                        </a>
                       </div>
 
                       <h5 className="text-xs text-yellow-400 font-mono uppercase tracking-widest font-bold mt-4">{rhythmMsg}</h5>
