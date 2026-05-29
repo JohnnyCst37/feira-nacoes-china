@@ -204,10 +204,6 @@ export async function getQuestions(): Promise<QuestionCard[]> {
     try {
       const qSnap = await getDocs(collection(db, "questions"));
       if (qSnap.empty) {
-        // Se o Firestore real estiver vazio, popula inicialmente com as padrão
-        for (const q of defaultQuestions) {
-          await setDoc(doc(db, "questions", q.id), q);
-        }
         return defaultQuestions;
       }
       const questions: QuestionCard[] = [];
@@ -325,12 +321,7 @@ export async function getRewardVideos(): Promise<string[]> {
     try {
       const snap = await getDocs(collection(db, "reward_videos"));
       if (snap.empty) {
-        const urls: string[] = [];
-        for (let i = 0; i < defaultRewardVideos.length; i++) {
-          await setDoc(doc(db, "reward_videos", `video_${i + 1}`), { url: defaultRewardVideos[i] });
-          urls.push(defaultRewardVideos[i]);
-        }
-        return urls;
+        return defaultRewardVideos;
       }
       const urls: string[] = [];
       snap.forEach((doc) => {
@@ -368,9 +359,6 @@ export async function getStationConfigs(): Promise<StationConfig[]> {
     try {
       const snap = await getDocs(collection(db, "station_configs"));
       if (snap.empty) {
-        for (const config of defaultStationConfigs) {
-          await setDoc(doc(db, "station_configs", `station_${config.stationId}`), config);
-        }
         return defaultStationConfigs;
       }
       const configs: StationConfig[] = [];
@@ -417,7 +405,6 @@ export async function getAppSettings(): Promise<AppSettings> {
       if (snap.exists()) {
         return snap.data() as AppSettings;
       } else {
-        await setDoc(doc(db, "app_settings", "global"), defaultAppSettings);
         return defaultAppSettings;
       }
     } catch (error) {
