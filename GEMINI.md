@@ -58,3 +58,8 @@ Os alunos do 7º ano estão expostos a excessos e influências do mundo adulto d
    - Atualizada a Estação 4 (Dança do Dragão) com o vídeo funcional de Wadaiko/Tambores no desafio do ritmo (`https://www.youtube.com/embed/jYFgt-kEIrE`) e o vídeo de feedback do Grupo 4 (`https://www.youtube.com/embed/l0hIU89jJN8`).
 5. **Correção do Fluxo de Fritura do Pastel (Estação 5)**:
    - Corrigido o bug de travamento de estado no mini-game do pastel de feira. Caso o jogador retirasse o pastel no intervalo de queima (> 85%), a falta de um bloco de transição deixava a UI congelada em `'frying'` com o timer limpo. Adicionada a transição correta para o estado `'burnt'` (queimado), permitindo a repetição do mini-game por meio do botão "Tentar Novamente".
+6. **Exibição Imediata de Vídeos de Recompensa Pós-Conclusão da Trilha**:
+   - A lista dos 4 vídeos de recompensa final (trabalhos produzidos) agora é renderizada de forma imediata quando o aluno chega à tela de 'Jornada Concluída!'.
+   - Isso permite que o estudante assista aos trabalhos dos colegas antes de preencher a sua avaliação por estrelas e deixar o feedback.
+   - O formulário de avaliação continua interativo e, ao ser enviado, dá lugar de forma fluida à mensagem de confirmação e botões de atalho final, mantendo os vídeos visíveis.
+

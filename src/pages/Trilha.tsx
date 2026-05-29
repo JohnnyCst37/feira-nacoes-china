@@ -178,10 +178,11 @@ export default function Trilha() {
   const [pastelFryingState, setPastelFryingState] = useState<'idle' | 'frying' | 'done' | 'burnt' | 'soggy'>('idle');
   const [pastelFryingMsg, setPastelFryingMsg] = useState('Escolha o recheio e frite o pastel!');
   const fryingIntervalRef = useRef<number | null>(null);
+  const [rewardVideos, setRewardVideos] = useState<string[]>([]);
 
   const loadData = async () => {
     try {
-      const [list, students, , configs] = await Promise.all([
+      const [list, students, rewards, configs] = await Promise.all([
         getQuestions(), 
         getStudentsProgress(),
         getRewardVideos(),
@@ -189,6 +190,7 @@ export default function Trilha() {
       ]);
       setQuestions(list);
       setStationConfigs(configs);
+      setRewardVideos(rewards || []);
       
       // Ordena o leaderboard por XP decrescente
       const sortedLeaderboard = students
@@ -1839,8 +1841,51 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
                 </div>
               )}
 
+              {/* Seção de Vídeos de Recompensa */}
+              {rewardVideos.length > 0 && (
+                <div className="space-y-4 pt-4 border-t border-red-900/50">
+                  <div className="text-center">
+                    <h4 className="text-sm font-serif text-chinese-gold font-bold tracking-wide">🏆 Assista aos Trabalhos e Vídeos de Premiação</h4>
+                    <p className="text-zinc-400 text-[10px] mt-0.5">Explore os marcos da cultura chinesa produzidos pelos alunos</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-center">
+                    {rewardVideos.map((url, index) => {
+                      if (!url) return null;
+                      return (
+                        <div key={index} className="bg-red-950/40 border border-yellow-600/10 rounded-xl p-3 space-y-2 text-center">
+                          <span className="text-[10px] text-yellow-400 font-mono uppercase tracking-widest font-bold block">Vídeo de Recompensa {index + 1}</span>
+                          <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden border border-zinc-900">
+                            <iframe
+                              className="absolute inset-0 w-full h-full"
+                              src={url}
+                              title={`Recompensa ${index + 1}`}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </div>
+                          <a
+                            href={
+                              url.includes("youtube.com/embed/")
+                                ? `https://www.youtube.com/watch?v=${url.split("youtube.com/embed/")[1]?.split("?")[0] || ""}`
+                                : url
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[9px] text-chinese-gold hover:text-yellow-400 font-bold underline inline-block"
+                          >
+                            Abrir vídeo em tela cheia ↗
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {!isSaved ? (
-                <div className="space-y-6 max-w-md mx-auto pt-4 border-t border-zinc-900">
+                <div className="space-y-6 max-w-md mx-auto pt-6 border-t border-zinc-900">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-zinc-300 block">
                       Avalie o trabalho e a feira dos alunos (Estrelas):
@@ -1896,20 +1941,30 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
                   </button>
                 </div>
               ) : (
-                <div className="space-y-4 max-w-sm mx-auto pt-4 animate-fade-in">
-                  <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
-                    <Check className="w-5 h-5" />
-                    <span>Seu nome foi registrado com sucesso!</span>
+                <div className="space-y-6 animate-fade-in w-full text-center pt-6 border-t border-zinc-900">
+                  <div className="flex items-center justify-center gap-2 text-green-400 font-bold text-sm">
+                    <Check className="w-5 h-5 animate-pulse" />
+                    <span>Sua jornada e avaliação foram registradas!</span>
                   </div>
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem('mock_user');
-                      window.location.reload();
-                    }}
-                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl transition text-sm"
-                  >
-                    Entrar com Outro Usuário
-                  </button>
+
+                  {/* Botões Finais */}
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto pt-4 border-t border-red-900/50">
+                    <button
+                      onClick={() => setShowRewardModal(true)}
+                      className="flex-1 bg-gradient-to-r from-chinese-gold to-yellow-600 hover:from-yellow-500 hover:to-chinese-gold text-black font-bold py-2.5 rounded-xl text-xs active:scale-95 transition shadow-md"
+                    >
+                      Abrir Carta Mítica 🏮
+                    </button>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem('mock_user');
+                        window.location.reload();
+                      }}
+                      className="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold py-2.5 rounded-xl text-xs active:scale-95 transition"
+                    >
+                      Concluir & Novo Acesso 👤
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
