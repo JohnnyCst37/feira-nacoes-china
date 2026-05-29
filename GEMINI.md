@@ -51,3 +51,7 @@ Os alunos do 7º ano estão expostos a excessos e influências do mundo adulto d
    - Corrigido o erro de sintaxe JSX `'return' outside of function` em `src/pages/Trilha.tsx` eliminando uma chave extra (`};`) que fechava o escopo do componente antes do tempo. O comando `npm run build` agora compila para produção com 100% de sucesso.
    - Implementada a opção **"Gerar sem Foto"** no gerador. Se o aluno escolher essa opção, o Canvas do card ignora a selfie e exibe o plano de fundo original intacto (mantendo os guerreiros tradicionais com seus rostos originais ou o céu central nos cenários de medalhão).
    - Ocultei dinamicamente os controles deslizantes de fusão de rosto (Y-offset e Zoom) na UI caso o card seja gerado sem foto, deixando a interface limpa.
+4. **Resiliência e Preview de Vídeos (YouTube/Drive)**:
+   - Adicionada área de pré-visualização (Iframe) em tempo real no Painel Admin para o professor testar se a incorporação dos vídeos funciona ou se é bloqueada pelo YouTube.
+   - Adicionados links de escape amigáveis (*"Não carregou? Assistir diretamente no YouTube/Drive ↗"*) abaixo de todos os players de vídeo na Trilha e no Admin para mitigar erros de indisponibilidade de embed.
+   - Atualizada a Estação 3 (Instrumentos) com o vídeo padrão do Erhu fornecido pelo professor (`https://www.youtube.com/embed/1XaAreqeiI0`).
