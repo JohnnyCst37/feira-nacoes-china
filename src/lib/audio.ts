@@ -8,15 +8,27 @@ class AudioController {
   private bgAudio: HTMLAudioElement | null = null;
   private isMuted: boolean = true;
   private currentUrl: string = '';
+  private volume: number = 0.25;
 
   constructor() {
     if (typeof window !== 'undefined') {
       this.bgAudio = new Audio();
       this.bgAudio.loop = true;
-      this.bgAudio.volume = 0.25; // Volume suave de fundo
+      this.bgAudio.volume = this.volume;
       this.currentUrl = '/audio/traditional_chinese_music.webm';
       this.bgAudio.src = this.currentUrl;
     }
+  }
+
+  public setVolume(volume: number) {
+    this.volume = volume;
+    if (this.bgAudio) {
+      this.bgAudio.volume = volume;
+    }
+  }
+
+  public getVolume(): number {
+    return this.volume;
   }
 
   /**

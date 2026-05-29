@@ -2,7 +2,8 @@ import {
   collection, 
   getDocs, 
   doc, 
-  setDoc 
+  setDoc,
+  getDoc
 } from "firebase/firestore";
 import { db, isMockMode } from "./firebase";
 
@@ -42,6 +43,16 @@ export interface StationConfig {
   extraMediaUrl1?: string; // Mídia extra 1 (ex: Instrumento A)
   extraMediaUrl2?: string; // Mídia extra 2 (ex: Instrumento B)
 }
+
+export interface AppSettings {
+  soundtrackUrl: string;
+  soundtrackVolume: number;
+}
+
+const defaultAppSettings: AppSettings = {
+  soundtrackUrl: "/audio/traditional_chinese_music.webm",
+  soundtrackVolume: 0.25
+};
 
 // Configurações padrão de atmosfera por estação (imagens/videos de fundo e melodias)
 const defaultStationConfigs: StationConfig[] = [
@@ -172,6 +183,9 @@ const initMockDB = () => {
   }
   if (!localStorage.getItem("mock_station_configs")) {
     localStorage.setItem("mock_station_configs", JSON.stringify(defaultStationConfigs));
+  }
+  if (!localStorage.getItem("mock_app_settings")) {
+    localStorage.setItem("mock_app_settings", JSON.stringify(defaultAppSettings));
   }
 };
 
@@ -387,5 +401,39 @@ export async function saveStationConfig(config: StationConfig): Promise<void> {
     localStorage.setItem("mock_station_configs", JSON.stringify(configs));
   } else {
     await setDoc(doc(db, "station_configs", `station_${config.stationId}`), config);
+  }
+}
+
+/**
+ * Busca as configurações globais do aplicativo (como trilha sonora e volume).
+ */
+export async function getAppSettings(): Promise<AppSettings> {
+  if (isMockMode) {
+    const data = localStorage.getItem("mock_app_settings");
+    return data ? JSON.parse(data) : defaultAppSettings;
+  } else {
+    try {
+      const snap = await getDoc(doc(db, "app_settings", "global"));
+      if (snap.exists()) {
+        return snap.data() as AppSettings;
+      } else {
+        await setDoc(doc(db, "app_settings", "global"), defaultAppSettings);
+        return defaultAppSettings;
+      }
+    } catch (error) {
+      console.error("Erro ao buscar app_settings do Firestore:", error);
+      return defaultAppSettings;
+    }
+  }
+}
+
+/**
+ * Salva as configurações globais do aplicativo.
+ */
+export async function saveAppSettings(settings: AppSettings): Promise<void> {
+  if (isMockMode) {
+    localStorage.setItem("mock_app_settings", JSON.stringify(settings));
+  } else {
+    await setDoc(doc(db, "app_settings", "global"), settings);
   }
 }

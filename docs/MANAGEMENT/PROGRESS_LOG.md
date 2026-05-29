@@ -3,7 +3,7 @@
 ## Resumo do Status
 - **Fase**: Redesenho Narrativo e Imersivo (Fase 4)
 - **Status Geral**: Concluído (Pronto para a Feira)
-- **Última Atualização**: 2026-05-23
+- **Última Atualização**: 2026-05-28
 
 ---
 
@@ -119,6 +119,15 @@
     - **Melhoria de Navegação na Home (Admin/Alunos)**:
       - Removido o redirecionamento automático rígido do `useEffect` ao carregar a página inicial (Home.tsx), permitindo que o administrador e estudantes acessem a Home livremente mesmo estando logados.
       - Adicionado card de identificação e botões de atalho no lugar do formulário de login na Home, permitindo continuar a trilha, ir ao Painel do Professor (caso Admin) ou deslogar de forma intuitiva.
+
+### [2026-05-28] Trilha Sonora Global & Controle de Volume (Fase 4 - Melhoria)
+- **Tarefa**: Adicionar link MP3 personalizado e ajuste de volume para a trilha de fundo.
+  - *Status*: Concluído.
+  - *Ações*:
+    - Adicionado suporte a `AppSettings` (Firestore e LocalStorage) e criados os métodos getter/setter de volume dinâmico em `audio.ts`.
+    - Criada a seção "Trilha Sonora Global" no Painel do Professor (`Admin.tsx`), contendo um input para colar o link MP3, um slider interativo de volume de `0%` a `100%`, um botão de teste de som integrado (Play/Pause) e um botão de salvamento.
+    - Atualizada a página inicial (`Home.tsx`) para puxar as configurações de áudio diretamente do banco de dados no ciclo de vida e aplicar o volume exato do professor.
+    - Executado build de validação com 100% de sucesso.
 
 ---
 

@@ -9,11 +9,14 @@ import {
   saveRewardVideos, 
   getStationConfigs, 
   saveStationConfig, 
+  getAppSettings,
+  saveAppSettings,
   QuestionCard, 
   StudentProgress, 
-  StationConfig 
+  StationConfig
 } from '../lib/db';
-import { Users, ClipboardList, Star, Save, LogOut, ChevronLeft, Check } from 'lucide-react';
+import { Users, ClipboardList, Star, Save, LogOut, ChevronLeft, Check, Play, Square, Volume2 } from 'lucide-react';
+import { audio } from '../lib/audio';
 
 const getBadgeEmojis = (badgesList: string[] = []) => {
   const map: Record<string, string> = {
@@ -65,19 +68,28 @@ export default function Admin() {
   const [stationExtraMedia2, setStationExtraMedia2] = useState('');
   const [stationSaveSuccess, setStationSaveSuccess] = useState(false);
 
+  // Trilha Sonora Global
+  const [soundtrackUrl, setSoundtrackUrl] = useState('');
+  const [soundtrackVolume, setSoundtrackVolume] = useState(0.25);
+  const [soundtrackSaveSuccess, setSoundtrackSaveSuccess] = useState(false);
+  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+
   const loadAdminData = async () => {
     setLoading(true);
     try {
-      const [studentList, questionList, rewardList, configList] = await Promise.all([
+      const [studentList, questionList, rewardList, configList, appSettings] = await Promise.all([
         getStudentsProgress(),
         getQuestions(),
         getRewardVideos(),
-        getStationConfigs()
+        getStationConfigs(),
+        getAppSettings()
       ]);
       setStudents(studentList);
       setQuestions(questionList);
       setRewardUrls(rewardList);
       setStationConfigs(configList);
+      setSoundtrackUrl(appSettings.soundtrackUrl);
+      setSoundtrackVolume(appSettings.soundtrackVolume);
       
       // Auto-popula o form com a pergunta do grupo 1 por padrão
       const q1 = questionList.find(q => q.id_grupo === 1);
@@ -99,6 +111,9 @@ export default function Admin() {
 
   useEffect(() => {
     loadAdminData();
+    return () => {
+      audio.stopAll();
+    };
   }, []);
 
   const populateForm = (q: QuestionCard) => {
@@ -270,6 +285,35 @@ export default function Admin() {
     } catch (err) {
       console.error("Erro ao salvar vídeos de premiação:", err);
       alert("Erro ao salvar vídeos de premiação no banco.");
+    }
+  };
+
+  const handleTogglePreview = () => {
+    if (isPreviewPlaying) {
+      audio.pauseBackground();
+      setIsPreviewPlaying(false);
+    } else {
+      audio.setMelodyUrl(soundtrackUrl);
+      audio.setVolume(soundtrackVolume);
+      audio.playBackground();
+      setIsPreviewPlaying(true);
+    }
+  };
+
+  const handleSaveSoundtrack = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSoundtrackSaveSuccess(false);
+
+    try {
+      await saveAppSettings({
+        soundtrackUrl: soundtrackUrl.trim(),
+        soundtrackVolume: soundtrackVolume
+      });
+      setSoundtrackSaveSuccess(true);
+      setTimeout(() => setSoundtrackSaveSuccess(false), 3000);
+    } catch (err) {
+      console.error("Erro ao salvar trilha sonora global:", err);
+      alert("Erro ao salvar trilha sonora.");
     }
   };
 
@@ -532,6 +576,82 @@ export default function Admin() {
                   {rewardSaveSuccess ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
                   <span>{rewardSaveSuccess ? 'Vídeos Salvos!' : 'Salvar 4 Vídeos de Recompensa'}</span>
                 </button>
+              </form>
+            </section>
+
+            {/* Nova Seção: Trilha Sonora Global */}
+            <section className="bg-zinc-950/80 border border-zinc-800 rounded-2xl p-6 space-y-4 animate-fade-in">
+              <div>
+                <h2 className="text-xl font-serif text-chinese-gold tracking-wide">Trilha Sonora Global</h2>
+                <p className="text-zinc-500 text-xs mt-1">
+                  Defina o áudio MP3 de fundo do aplicativo e regule o volume padrão ouvido pelos visitantes.
+                </p>
+              </div>
+
+              <form onSubmit={handleSaveSoundtrack} className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">URL da Música (MP3 / WebM)</label>
+                  <input
+                    type="url"
+                    value={soundtrackUrl}
+                    onChange={(e) => setSoundtrackUrl(e.target.value)}
+                    placeholder="Deixe em branco para o padrão ou cole um link MP3"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-chinese-gold transition"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider">Volume da Música</label>
+                    <span className="text-xs text-chinese-gold font-mono font-bold">
+                      {Math.round(soundtrackVolume * 100)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Volume2 className="w-4 h-4 text-zinc-500" />
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={soundtrackVolume}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value);
+                        setSoundtrackVolume(val);
+                        audio.setVolume(val); // Ajusta o volume do elemento se estiver tocando
+                      }}
+                      className="flex-1 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-chinese-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleTogglePreview}
+                    className="flex-1 flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition"
+                  >
+                    {isPreviewPlaying ? (
+                      <>
+                        <Square className="w-3.5 h-3.5 text-chinese-red fill-chinese-red" />
+                        <span>Parar Teste</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-3.5 h-3.5 text-chinese-gold fill-chinese-gold" />
+                        <span>Testar Trilha</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-chinese-gold to-yellow-600 hover:from-yellow-500 hover:to-chinese-gold text-black py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 shadow-md transition text-xs"
+                  >
+                    {soundtrackSaveSuccess ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                    <span>{soundtrackSaveSuccess ? 'Configurações Salvas!' : 'Salvar Trilha & Volume'}</span>
+                  </button>
+                </div>
               </form>
             </section>
 

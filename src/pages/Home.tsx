@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, Compass, LogIn, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
 import { audio } from '../lib/audio';
+import { getAppSettings } from '../lib/db';
 
 type StageType = 'lanterns' | 'dragon' | 'login';
 
@@ -21,11 +22,23 @@ export default function Home() {
   const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
-    setIsMuted(audio.getMuteState());
-    audio.setMelodyUrl('/audio/traditional_chinese_music.webm');
-    if (!audio.getMuteState()) {
-      audio.playBackground();
-    }
+    const initAudio = async () => {
+      try {
+        const settings = await getAppSettings();
+        audio.setMelodyUrl(settings.soundtrackUrl);
+        audio.setVolume(settings.soundtrackVolume);
+        
+        setIsMuted(audio.getMuteState());
+        if (!audio.getMuteState()) {
+          audio.playBackground();
+        }
+      } catch (err) {
+        console.error("Erro ao carregar configurações de áudio na Home:", err);
+      }
+    };
+
+    initAudio();
+
     return () => {
       audio.pauseBackground();
     };
