@@ -11,11 +11,12 @@ import {
   saveStationConfig, 
   getAppSettings,
   saveAppSettings,
+  deleteStudentProgress,
   QuestionCard, 
   StudentProgress, 
   StationConfig
 } from '../lib/db';
-import { Users, ClipboardList, Star, Save, LogOut, ChevronLeft, Check, Play, Square, Volume2 } from 'lucide-react';
+import { Users, ClipboardList, Star, Save, LogOut, ChevronLeft, Check, Play, Square, Volume2, Trash2 } from 'lucide-react';
 import { audio } from '../lib/audio';
 
 const getBadgeEmojis = (badgesList: string[] = []) => {
@@ -321,6 +322,19 @@ export default function Admin() {
   const handleLogout = async () => {
     await logout();
     navigate('/');
+  };
+
+  const handleDeleteStudent = async (uid: string, name: string) => {
+    if (window.confirm(`Deseja realmente excluir o progresso do aluno "${name}"? Esta ação removerá o registro permanentemente do banco de dados.`)) {
+      try {
+        await deleteStudentProgress(uid);
+        // Recarrega os dados localmente
+        await loadAdminData();
+      } catch (err) {
+        console.error("Erro ao deletar progresso do aluno:", err);
+        alert("Erro ao tentar excluir o progresso do aluno.");
+      }
+    }
   };
 
   // Cálculos de métricas
@@ -800,12 +814,13 @@ export default function Admin() {
                       <th className="py-4 px-4 font-semibold text-center">Estrelas</th>
                       <th className="py-4 px-4 font-semibold text-center">Medalhas</th>
                       <th className="py-4 px-4 font-semibold">Feedback Escrito</th>
+                      <th className="py-4 px-4 font-semibold text-center">Ações</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900">
                     {students.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="text-center py-8 text-zinc-600 font-mono">
+                        <td colSpan={7} className="text-center py-8 text-zinc-600 font-mono">
                           Nenhum aluno realizou a trilha ainda.
                         </td>
                       </tr>
@@ -847,6 +862,16 @@ export default function Admin() {
                           </td>
                           <td className="py-4 px-4 max-w-xs text-zinc-400 text-xs truncate italic" title={student.feedbackText}>
                             {student.feedbackText || <span className="text-zinc-700 not-italic">Sem comentários</span>}
+                          </td>
+                          <td className="py-4 px-4 text-center">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteStudent(student.uid, student.name)}
+                              className="p-2 bg-zinc-900/60 hover:bg-red-950 text-zinc-500 hover:text-red-400 border border-zinc-800 hover:border-red-900/40 rounded-xl transition active:scale-95 inline-flex items-center justify-center"
+                              title="Excluir Aluno"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </td>
                         </tr>
                       ))

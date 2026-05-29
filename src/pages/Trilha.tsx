@@ -213,6 +213,16 @@ export default function Trilha() {
           if (myProgress.badges.includes('badge_5')) completed.push(5);
           setCompletedStations(completed);
         } else {
+          // Inicializa o progresso do novo aluno no banco de dados para capturar nome e e-mail imediatamente
+          await saveStudentProgress(user.uid, {
+            name: user.displayName || "Aluno Convidado",
+            email: user.email || "",
+            xp: 50,
+            badges: [],
+            score: 0,
+            completed: false,
+            stars: 0
+          });
           setXp(50);
         }
       }
@@ -423,6 +433,8 @@ export default function Trilha() {
 
     if (user) {
       saveStudentProgress(user.uid, {
+        name: user.displayName || "Aluno Convidado",
+        email: user.email || "",
         xp: newXP,
         badges: updatedBadges,
         score: score + (answer === 'erhu' ? 1 : 0)
@@ -552,6 +564,8 @@ export default function Trilha() {
 
     if (user) {
       saveStudentProgress(user.uid, {
+        name: user.displayName || "Aluno Convidado",
+        email: user.email || "",
         score: score + (correct ? 1 : 0),
         xp: newXP,
         badges: updatedBadges,
@@ -572,6 +586,8 @@ export default function Trilha() {
     
     try {
       await saveStudentProgress(user.uid, {
+        name: user.displayName || "Aluno Convidado",
+        email: user.email || "",
         xp: finalXP,
         badges: finalBadges,
         stars: stars,
