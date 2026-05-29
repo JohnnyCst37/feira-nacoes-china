@@ -224,7 +224,6 @@ export default function Trilha() {
   useEffect(() => {
     loadData();
     setIsMuted(audio.getMuteState());
-    audio.pauseBackground(); // A música de fundo em loop só toca na Home/Login
   }, [user]);
 
   useEffect(() => {
@@ -239,7 +238,29 @@ export default function Trilha() {
   const handleToggleMute = () => {
     const muted = audio.toggleMute();
     setIsMuted(muted);
+    if (!muted) {
+      const isPlayingVideoOrEarChallenge = showVideoModal || (activeStation === 3 && stationStep === 'game');
+      if (!isPlayingVideoOrEarChallenge) {
+        audio.playBackground();
+      }
+    } else {
+      audio.pauseBackground();
+    }
   };
+
+  // Efeito para controlar a reprodução inteligente da trilha sonora de fundo
+  // Ela deve pausar caso haja um vídeo em reprodução ou estejamos no jogo de áudio da Estação 3
+  useEffect(() => {
+    const isPlayingVideoOrEarChallenge = showVideoModal || (activeStation === 3 && stationStep === 'game');
+    
+    if (isPlayingVideoOrEarChallenge) {
+      audio.pauseBackground();
+    } else {
+      if (!audio.getMuteState()) {
+        audio.playBackground();
+      }
+    }
+  }, [activeStation, stationStep, showVideoModal]);
 
   // Dispara áudio de transição ao entrar em uma estação
   const enterStation = (num: number) => {
@@ -249,7 +270,7 @@ export default function Trilha() {
     
     // Altera a melodia de fundo conforme a configuração da estação
     const config = stationConfigs.find(c => c.stationId === num);
-    audio.setMelodyUrl(config?.melodyUrl || '/audio/traditional_chinese_music.webm');
+    audio.setMelodyUrl(config?.melodyUrl || '/audio/traditional_chinese_music.mp3');
     
     // Reseta todos os mini-game states
     setTeaSequence([]);
@@ -283,7 +304,7 @@ export default function Trilha() {
   const backToMap = () => {
     audio.playWindChimes();
     setActiveStation(null);
-    audio.setMelodyUrl('/audio/traditional_chinese_music.webm');
+    audio.setMelodyUrl('/audio/traditional_chinese_music.mp3');
     if (fryingIntervalRef.current) {
       clearInterval(fryingIntervalRef.current);
     }

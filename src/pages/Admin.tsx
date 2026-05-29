@@ -110,6 +110,7 @@ export default function Admin() {
   };
 
   useEffect(() => {
+    audio.pauseBackground(); // Garante silêncio inicial no painel admin
     loadAdminData();
     return () => {
       audio.stopAll();

@@ -127,6 +127,7 @@
     - Adicionado suporte a `AppSettings` (Firestore e LocalStorage) e criados os métodos getter/setter de volume dinâmico em `audio.ts`.
     - Criada a seção "Trilha Sonora Global" no Painel do Professor (`Admin.tsx`), contendo um input para colar o link MP3, um slider interativo de volume de `0%` a `100%`, um botão de teste de som integrado (Play/Pause) e um botão de salvamento.
     - Atualizada a página inicial (`Home.tsx`) para puxar as configurações de áudio diretamente do banco de dados no ciclo de vida e aplicar o volume exato do professor.
+    - **Melhoria de Reprodução Contínua**: Removida a interrupção da música ao entrar na Trilha (`Trilha.tsx`). A música de fundo agora toca continuamente e só pausa automaticamente se houver um vídeo em reprodução (como a apresentação dos alunos) ou se o estudante estiver no quiz de ouvido da Estação 3 (para não sobrepor o som dos instrumentos). Ao fechar o vídeo ou encerrar o desafio, a música de fundo é retomada automaticamente no volume definido.
     - Executado build de validação com 100% de sucesso.
 
 ---
