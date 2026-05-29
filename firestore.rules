@@ -5,12 +5,12 @@ service cloud.firestore {
     
     // Configurações globais do app (Trilha Sonora, Volume)
     // Qualquer visitante (logado ou não) precisa ler a trilha sonora.
-    // Apenas o professor (email específico) pode editar.
+    // Apenas o professor (email específico ou domínio da escola) pode editar.
     match /app_settings/{document} {
       allow read: if true;
       allow write: if request.auth != null && (
-        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
-        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+        request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
       );
     }
     
@@ -18,8 +18,8 @@ service cloud.firestore {
     match /station_configs/{document} {
       allow read: if true;
       allow write: if request.auth != null && (
-        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
-        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+        request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
       );
     }
 
@@ -27,8 +27,8 @@ service cloud.firestore {
     match /questions/{document} {
       allow read: if true;
       allow write: if request.auth != null && (
-        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
-        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+        request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
       );
     }
 
@@ -36,8 +36,8 @@ service cloud.firestore {
     match /reward_videos/{document} {
       allow read: if true;
       allow write: if request.auth != null && (
-        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
-        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+        request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
       );
     }
 
@@ -48,8 +48,8 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null && (
         request.auth.uid == userId ||
-        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
-        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+        request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
       );
     }
   }
