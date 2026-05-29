@@ -34,8 +34,8 @@ Os alunos do 7º ano estão expostos a excessos e influências do mundo adulto d
 ---
 
 ## Decisões Arquiteturais e de Design
-- **Autenticação**: Google OAuth via Firebase Auth.
-- **Armazenamento**: Respostas e progresso dos alunos salvos no Firestore.
+- **Autenticação**: Google OAuth via Firebase Auth para administradores/professores e logins irrestritos. Adicionado o **Acesso Rápido** (Login Anônimo via Firebase `signInAnonymously`) para alunos com contas institucionais Google Workspace bloqueadas. Conta com fallback local no `localStorage` caso o provedor anônimo do Firebase esteja offline ou desativado. Acessos anônimos nunca recebem privilégios de Admin.
+- **Armazenamento**: Respostas e progresso salvos no Firestore. As regras de segurança em `firestore.rules` foram estendidas para aceitar gravações se o usuário estiver logado ou se o UID do documento começar com `anon-` ou `mock-` (assegurando gravação no modo fallback).
 - **Design System (Royal Strategy / Ghost Aesthetic)**: Uso estrito de cores semânticas e componentes premium. Evitar cores hexadecimais soltas; utilizar Tailwind com micro-animações, gradientes elegantes e suporte a dark mode.
 
 ---

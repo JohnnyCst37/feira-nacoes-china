@@ -11,12 +11,12 @@ export default function Home() {
   const [stage, setStage] = useState<StageType>('lanterns');
   const [error, setError] = useState<string | null>(null);
   
-  // Mock form state
-  const [showMockForm, setShowMockForm] = useState(false);
-  const [mockName, setMockName] = useState('');
-  const [mockEmail, setMockEmail] = useState('');
+  // Anonymous / Mock form state
+  const [showAnonForm, setShowAnonForm] = useState(false);
+  const [studentName, setStudentName] = useState('');
+  const [studentEmail, setStudentEmail] = useState('');
 
-  const { user, loginWithGoogle, loginWithMock, isMock, logout } = useAuth();
+  const { user, loginWithGoogle, loginWithMock, loginAnonymously, isMock, logout } = useAuth();
   const navigate = useNavigate();
 
   const [isMuted, setIsMuted] = useState(true);
@@ -65,32 +65,32 @@ export default function Home() {
     };
   }, []);
 
-  const handleLoginClick = async () => {
+  const handleGoogleLoginClick = async () => {
     setError(null);
-    if (isMock) {
-      setShowMockForm(true);
-    } else {
-      try {
-        await loginWithGoogle();
-      } catch (err: unknown) {
-        console.error(err);
-        setError("Erro ao tentar entrar com o Google. Por favor, tente novamente.");
-      }
+    try {
+      await loginWithGoogle();
+    } catch (err: unknown) {
+      console.error(err);
+      setError("Erro ao tentar entrar com o Google. Por favor, tente novamente.");
     }
   };
 
-  const handleMockSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!mockName.trim() || !mockEmail.trim()) {
-      setError("Por favor, preencha todos os campos.");
+    if (!studentName.trim()) {
+      setError("Por favor, preencha seu nome.");
       return;
     }
     try {
-      await loginWithMock(mockName, mockEmail);
+      if (isMock) {
+        await loginWithMock(studentName, studentEmail);
+      } else {
+        await loginAnonymously(studentName, studentEmail);
+      }
     } catch (err: unknown) {
       console.error(err);
-      setError("Erro no login simulado.");
+      setError("Erro ao autenticar. Por favor, tente novamente.");
     }
   };
 
@@ -197,22 +197,32 @@ export default function Home() {
                 <button
                   onClick={async () => {
                     await logout();
-                    setShowMockForm(false);
+                    setShowAnonForm(false);
                   }}
                   className="text-[10px] text-zinc-550 hover:text-red-400 transition font-mono uppercase tracking-widest block mx-auto pt-2 hover:underline"
                 >
                   Sair / Entrar com outra conta 🚪
                 </button>
               </div>
-            ) : !showMockForm ? (
+            ) : !showAnonForm ? (
               <div className="space-y-4">
+                {/* Botão Google */}
                 <button
-                  onClick={handleLoginClick}
+                  onClick={handleGoogleLoginClick}
                   className="group relative w-full flex items-center justify-center gap-3 bg-gradient-to-r from-chinese-red to-red-700 hover:from-red-600 hover:to-chinese-red text-white py-4 px-6 rounded-xl font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(200,16,46,0.3)] hover:shadow-[0_4px_25px_rgba(200,16,46,0.5)] active:scale-95"
                 >
                   <LogIn className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   <span>Entrar com o Google</span>
                   <div className="absolute inset-0 rounded-xl border border-chinese-gold/30 group-hover:border-chinese-gold/60 transition-colors pointer-events-none"></div>
+                </button>
+
+                {/* Botão Acesso Rápido */}
+                <button
+                  onClick={() => setShowAnonForm(true)}
+                  className="group relative w-full flex items-center justify-center gap-3 bg-zinc-900 hover:bg-zinc-800 text-chinese-gold py-4 px-6 rounded-xl font-bold transition-all duration-300 border border-zinc-800 hover:border-chinese-gold/30 active:scale-95"
+                >
+                  <Sparkles className="w-5 h-5 text-chinese-gold animate-pulse" />
+                  <span>Acesso Rápido (Sem Conta Google)</span>
                 </button>
 
                 {isMock && (
@@ -222,41 +232,49 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <form onSubmit={handleMockSubmit} className="space-y-4 text-left animate-fade-in">
+              <form onSubmit={handleFormSubmit} className="space-y-4 text-left animate-fade-in">
                 <div className="space-y-1">
                   <label className="text-xs text-chinese-gold font-mono uppercase tracking-wider">Nome Completo</label>
                   <input
                     type="text"
                     required
-                    value={mockName}
-                    onChange={(e) => setMockName(e.target.value)}
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
                     placeholder="Ex: João Silva"
                     className="w-full bg-zinc-900 border border-zinc-700 rounded-xl py-3 px-4 text-white placeholder-zinc-500 focus:outline-none focus:border-chinese-gold transition"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-chinese-gold font-mono uppercase tracking-wider">E-mail</label>
+                  <label className="text-xs text-chinese-gold font-mono uppercase tracking-wider">E-mail ou Turma (Opcional)</label>
                   <input
-                    type="email"
-                    required
-                    value={mockEmail}
-                    onChange={(e) => setMockEmail(e.target.value)}
-                    placeholder="Ex: joao@escola.mt.gov.br"
+                    type="text"
+                    value={studentEmail}
+                    onChange={(e) => setStudentEmail(e.target.value)}
+                    placeholder="Ex: 7º Ano D ou joao@escola.mt.gov.br"
                     className="w-full bg-zinc-900 border border-zinc-700 rounded-xl py-3 px-4 text-white placeholder-zinc-500 focus:outline-none focus:border-chinese-gold transition"
                   />
                   <p className="text-[10px] text-zinc-500 leading-normal mt-1">
-                    💡 Dica: Use um e-mail contendo <code className="text-chinese-gold">professor</code> ou <code className="text-chinese-gold">admin</code> para logar no Painel do Professor.
+                    💡 Dica: Se você for o Professor, volte e use "Entrar com o Google" para ter acesso administrativo.
                   </p>
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-chinese-gold to-yellow-600 hover:from-yellow-500 hover:to-chinese-gold text-black py-3 px-6 rounded-xl font-bold transition duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-[0_4px_15px_rgba(255,215,0,0.2)]"
-                >
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>Confirmar Login Simulado</span>
-                </button>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAnonForm(false)}
+                    className="flex-1 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 py-3 px-4 rounded-xl font-bold transition duration-300 text-xs active:scale-95"
+                  >
+                    Voltar
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-chinese-gold to-yellow-600 hover:from-yellow-500 hover:to-chinese-gold text-black py-3 px-4 rounded-xl font-bold transition duration-300 flex items-center justify-center gap-2 text-xs active:scale-95 shadow-[0_4px_15px_rgba(255,215,0,0.2)]"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Iniciar Jornada</span>
+                  </button>
+                </div>
               </form>
             )}
           </div>

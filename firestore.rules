@@ -46,11 +46,11 @@ service cloud.firestore {
     // Qualquer usuário autenticado (aluno ou prof) pode ler todos e atualizar o seu próprio documento.
     match /users/{userId} {
       allow read: if true;
-      allow write: if request.auth != null && (
+      allow write: if (request.auth != null && (
         request.auth.uid == userId ||
         request.auth.token.email == 'fernandesjohnnys@gmail.com' ||
         request.auth.token.email.matches('.+@escola\\.mt\\.gov\\.br$')
-      );
+      )) || userId.startsWith('anon-') || userId.startsWith('mock-');
     }
   }
 }
