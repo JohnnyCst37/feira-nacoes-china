@@ -84,7 +84,7 @@ const defaultStationConfigs: StationConfig[] = [
     customTitle: "Templo Acústico de Cordas",
     customSubtitle: "Vibração harmônica pentatônica de Guzheng & Erhu",
     extraMediaUrl1: "https://www.youtube.com/embed/z12M1bI06iM", // Som Pipa
-    extraMediaUrl2: "https://www.youtube.com/embed/R6jYq2-z1c0"  // Som Erhu
+    extraMediaUrl2: "https://www.youtube.com/embed/2SXjOj1u1ZE"  // Som Erhu
   },
   {
     stationId: 4,
@@ -137,7 +137,7 @@ const defaultQuestions: QuestionCard[] = [
     pergunta: "Qual instrumento chinês de duas cordas tocado com arco possui uma caixa sonora de madeira tradicionalmente encapada com pele de serpente?",
     opcoes: ["Erhu", "Pipa", "Guzheng", "Dizi"],
     resposta_correta: "Erhu",
-    video_feedback_url: "https://www.youtube.com/embed/R6jYq2-z1c0",
+    video_feedback_url: "https://www.youtube.com/embed/2SXjOj1u1ZE",
     texto_explicativo: "O Erhu é um instrumento melódico milenar. Seu timbre expressivo deve-se às duas cordas sintonizadas em intervalos de quinta que vibram a caixa acústica recoberta de pele de cobra, produzindo ondas sonoras marcantes."
   },
   {
@@ -166,7 +166,7 @@ const defaultQuestions: QuestionCard[] = [
 const defaultRewardVideos = [
   "https://www.youtube.com/embed/RkL6n327SIs", // Festival de Outono
   "https://www.youtube.com/embed/z12M1bI06iM", // Rota do Chá
-  "https://www.youtube.com/embed/R6jYq2-z1c0", // Instrumentos
+  "https://www.youtube.com/embed/2SXjOj1u1ZE", // Instrumentos
   "https://www.youtube.com/embed/nU2Wos-v680"  // Dança do Dragão
 ];
 
