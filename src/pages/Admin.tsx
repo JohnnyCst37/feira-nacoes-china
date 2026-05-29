@@ -524,6 +524,20 @@ export default function Admin() {
 
                 <div className="space-y-1">
                   <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">Link do Vídeo (YouTube, Shorts ou Google Drive)</label>
+                  
+                  {editingGroupId === 3 && (
+                    <div className="mb-2 bg-red-950/40 border border-yellow-600/20 rounded-xl p-2.5 flex items-center justify-between text-[11px]">
+                      <span className="text-zinc-300 font-serif">Padrão sugerido para Instrumentos (Erhu):</span>
+                      <button
+                        type="button"
+                        onClick={() => setVideoUrl("https://youtu.be/1XaAreqeiI0")}
+                        className="bg-yellow-600/20 hover:bg-yellow-600/30 text-chinese-gold px-2 py-1 rounded border border-yellow-650/45 transition font-bold active:scale-95"
+                      >
+                        Aplicar Vídeo Padrão 🏮
+                      </button>
+                    </div>
+                  )}
+
                   <input
                     type="url"
                     value={videoUrl}
@@ -534,6 +548,35 @@ export default function Admin() {
                   <p className="text-[10px] text-zinc-500 font-mono mt-0.5">
                     💡 Links de vídeos normais do YouTube ou compartilhados do Google Drive são formatados automaticamente.
                   </p>
+
+                  {videoUrl.trim() && (
+                    <div className="mt-2.5 space-y-2 bg-zinc-950/65 border border-zinc-800 rounded-xl p-3.5 animate-fade-in">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-chinese-gold font-mono uppercase tracking-wider">Pré-visualização do Vídeo:</span>
+                        <a
+                          href={videoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-yellow-500 hover:text-yellow-400 font-semibold underline flex items-center gap-1"
+                        >
+                          Abrir link original ↗
+                        </a>
+                      </div>
+                      <div className="relative aspect-video w-full max-w-sm mx-auto bg-black rounded-lg overflow-hidden border border-zinc-850">
+                        <iframe
+                          className="absolute inset-0 w-full h-full"
+                          src={getEmbedUrl(videoUrl.trim())}
+                          title="Pré-visualização de Vídeo"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                      <p className="text-[9px] text-zinc-500 leading-normal text-center italic">
+                        Nota: Se o player acima mostrar "Vídeo indisponível", significa que o YouTube bloqueou a incorporação deste vídeo. Nesse caso, use outro link ou oriente os alunos a utilizarem o botão de abrir externamente.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -769,9 +812,30 @@ export default function Admin() {
                         placeholder="Ex: https://youtube.com/watch?v=..."
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-chinese-gold transition"
                       />
+                      {stationExtraMedia1.trim() && (
+                        <div className="mt-1.5 relative aspect-video w-full max-w-[200px] mx-auto bg-black rounded border border-zinc-800 overflow-hidden">
+                          <iframe
+                            className="absolute inset-0 w-full h-full"
+                            src={getEmbedUrl(stationExtraMedia1.trim())}
+                            title="Pré-visualização Pipa"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </div>
+                      )}
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">Vídeo Real do Instrumento B (Erhu)</label>
+                      <div className="flex justify-between items-center text-[10px]">
+                        <label className="text-xs text-zinc-400 font-mono uppercase tracking-wider block">Vídeo Real do Instrumento B (Erhu)</label>
+                        <button
+                          type="button"
+                          onClick={() => setStationExtraMedia2("https://youtu.be/1XaAreqeiI0")}
+                          className="text-chinese-gold hover:underline font-bold"
+                        >
+                          Usar Padrão 🏮
+                        </button>
+                      </div>
                       <input
                         type="url"
                         value={stationExtraMedia2}
@@ -779,6 +843,18 @@ export default function Admin() {
                         placeholder="Ex: https://youtube.com/watch?v=..."
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 px-3 text-white text-xs focus:outline-none focus:border-chinese-gold transition"
                       />
+                      {stationExtraMedia2.trim() && (
+                        <div className="mt-1.5 relative aspect-video w-full max-w-[200px] mx-auto bg-black rounded border border-zinc-800 overflow-hidden">
+                          <iframe
+                            className="absolute inset-0 w-full h-full"
+                            src={getEmbedUrl(stationExtraMedia2.trim())}
+                            title="Pré-visualização Erhu"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          ></iframe>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}

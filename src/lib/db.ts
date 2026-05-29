@@ -3,7 +3,8 @@ import {
   getDocs, 
   doc, 
   setDoc,
-  getDoc
+  getDoc,
+  deleteDoc
 } from "firebase/firestore";
 import { db, isMockMode } from "./firebase";
 
@@ -84,7 +85,7 @@ const defaultStationConfigs: StationConfig[] = [
     customTitle: "Templo Acústico de Cordas",
     customSubtitle: "Vibração harmônica pentatônica de Guzheng & Erhu",
     extraMediaUrl1: "https://www.youtube.com/embed/z12M1bI06iM", // Som Pipa
-    extraMediaUrl2: "https://www.youtube.com/embed/2SXjOj1u1ZE"  // Som Erhu
+    extraMediaUrl2: "https://www.youtube.com/embed/1XaAreqeiI0"  // Som Erhu
   },
   {
     stationId: 4,
@@ -137,7 +138,7 @@ const defaultQuestions: QuestionCard[] = [
     pergunta: "Qual instrumento chinês de duas cordas tocado com arco possui uma caixa sonora de madeira tradicionalmente encapada com pele de serpente?",
     opcoes: ["Erhu", "Pipa", "Guzheng", "Dizi"],
     resposta_correta: "Erhu",
-    video_feedback_url: "https://www.youtube.com/embed/2SXjOj1u1ZE",
+    video_feedback_url: "https://www.youtube.com/embed/1XaAreqeiI0",
     texto_explicativo: "O Erhu é um instrumento melódico milenar. Seu timbre expressivo deve-se às duas cordas sintonizadas em intervalos de quinta que vibram a caixa acústica recoberta de pele de cobra, produzindo ondas sonoras marcantes."
   },
   {
@@ -166,7 +167,7 @@ const defaultQuestions: QuestionCard[] = [
 const defaultRewardVideos = [
   "https://www.youtube.com/embed/RkL6n327SIs", // Festival de Outono
   "https://www.youtube.com/embed/z12M1bI06iM", // Rota do Chá
-  "https://www.youtube.com/embed/2SXjOj1u1ZE", // Instrumentos
+  "https://www.youtube.com/embed/1XaAreqeiI0", // Instrumentos
   "https://www.youtube.com/embed/nU2Wos-v680"  // Dança do Dragão
 ];
 
@@ -422,5 +423,21 @@ export async function saveAppSettings(settings: AppSettings): Promise<void> {
     localStorage.setItem("mock_app_settings", JSON.stringify(settings));
   } else {
     await setDoc(doc(db, "app_settings", "global"), settings);
+  }
+}
+
+/**
+ * Remove o progresso de um estudante do banco de dados (exclui documento).
+ */
+export async function deleteStudentProgress(uid: string): Promise<void> {
+  if (isMockMode) {
+    const data = localStorage.getItem("mock_students_progress");
+    if (data) {
+      const list: StudentProgress[] = JSON.parse(data);
+      const filtered = list.filter((item) => item.uid !== uid);
+      localStorage.setItem("mock_students_progress", JSON.stringify(filtered));
+    }
+  } else {
+    await deleteDoc(doc(db, "users", uid));
   }
 }

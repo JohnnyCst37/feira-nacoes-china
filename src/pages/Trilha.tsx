@@ -1553,15 +1553,29 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
                         <div className="bg-red-900/30 border border-yellow-600/10 rounded-xl p-4 text-center space-y-3">
                           <h5 className="font-bold text-sm text-yellow-400 font-serif">Instrumento A</h5>
                           {currentStationConfig?.extraMediaUrl1 ? (
-                            <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden border border-yellow-600/20">
-                              <iframe
-                                className="absolute inset-0 w-full h-full"
-                                src={currentStationConfig.extraMediaUrl1}
-                                title="Instrumento A"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
+                            <div className="space-y-2">
+                              <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden border border-yellow-600/20">
+                                <iframe
+                                  className="absolute inset-0 w-full h-full"
+                                  src={currentStationConfig.extraMediaUrl1}
+                                  title="Instrumento A"
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                              <a
+                                href={
+                                  currentStationConfig.extraMediaUrl1.includes("youtube.com/embed/")
+                                    ? `https://www.youtube.com/watch?v=${currentStationConfig.extraMediaUrl1.split("youtube.com/embed/")[1]?.split("?")[0] || ""}`
+                                    : currentStationConfig.extraMediaUrl1
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[10px] text-chinese-gold hover:text-yellow-400 font-bold underline inline-block"
+                              >
+                                Abrir vídeo no YouTube ↗
+                              </a>
                             </div>
                           ) : (
                             <p className="text-xs text-red-200">Vídeo indisponível</p>
@@ -1571,15 +1585,29 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
                         <div className="bg-red-900/30 border border-yellow-600/10 rounded-xl p-4 text-center space-y-3">
                           <h5 className="font-bold text-sm text-yellow-400 font-serif">Instrumento B</h5>
                           {currentStationConfig?.extraMediaUrl2 ? (
-                            <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden border border-yellow-600/20">
-                              <iframe
-                                className="absolute inset-0 w-full h-full"
-                                src={currentStationConfig.extraMediaUrl2}
-                                title="Instrumento B"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
+                            <div className="space-y-2">
+                              <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden border border-yellow-600/20">
+                                <iframe
+                                  className="absolute inset-0 w-full h-full"
+                                  src={currentStationConfig.extraMediaUrl2}
+                                  title="Instrumento B"
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                              <a
+                                href={
+                                  currentStationConfig.extraMediaUrl2.includes("youtube.com/embed/")
+                                    ? `https://www.youtube.com/watch?v=${currentStationConfig.extraMediaUrl2.split("youtube.com/embed/")[1]?.split("?")[0] || ""}`
+                                    : currentStationConfig.extraMediaUrl2
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[10px] text-chinese-gold hover:text-yellow-400 font-bold underline inline-block"
+                              >
+                                Abrir vídeo no YouTube ↗
+                              </a>
                             </div>
                           ) : (
                             <p className="text-xs text-red-200">Vídeo indisponível</p>
@@ -1946,15 +1974,33 @@ Escreva a frase de forma direta e inspiradora. Não adicione nenhuma introduçã
 
             <div className="p-5 space-y-5">
               {currentVideoUrl && (
-                <div className="relative aspect-video w-full bg-black rounded-xl overflow-hidden border border-zinc-800">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src={currentVideoUrl}
-                    title="Vídeo de Feedback dos Alunos"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+                <div className="space-y-2">
+                  <div className="relative aspect-video w-full bg-black rounded-xl overflow-hidden border border-zinc-800">
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={currentVideoUrl}
+                      title="Vídeo de Feedback dos Alunos"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <div className="flex justify-center">
+                    <a
+                      href={
+                        currentVideoUrl.includes("youtube.com/embed/")
+                          ? `https://www.youtube.com/watch?v=${currentVideoUrl.split("youtube.com/embed/")[1]?.split("?")[0] || ""}`
+                          : currentVideoUrl.includes("drive.google.com/file/d/")
+                          ? `https://drive.google.com/file/d/${currentVideoUrl.split("drive.google.com/file/d/")[1]?.split("/")[0] || ""}/view`
+                          : currentVideoUrl
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-chinese-gold hover:text-yellow-400 font-bold underline flex items-center gap-1 active:scale-95 transition"
+                    >
+                      📺 Não carregou? Assistir diretamente no YouTube ou Drive ↗
+                    </a>
+                  </div>
                 </div>
               )}
 
