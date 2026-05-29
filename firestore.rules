@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Configurações globais do app (Trilha Sonora, Volume)
+    // Qualquer visitante (logado ou não) precisa ler a trilha sonora.
+    // Apenas o professor (email específico) pode editar.
+    match /app_settings/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+      );
+    }
+    
+    // Configurações individuais de atmosfera de cada Estação
+    match /station_configs/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+      );
+    }
+
+    // Perguntas do Quiz cadastradas
+    match /questions/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+      );
+    }
+
+    // Vídeos de Recompensa (Premiação)
+    match /reward_videos/{document} {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+      );
+    }
+
+    // Progresso dos alunos (Coleção de usuários)
+    // O Leaderboard precisa ler todos os alunos para ordenar.
+    // Qualquer usuário autenticado (aluno ou prof) pode ler todos e atualizar o seu próprio documento.
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && (
+        request.auth.uid == userId ||
+        request.auth.token.email.toLowerCase() == 'fernandesjohnnys@gmail.com' ||
+        request.auth.token.email.toLowerCase().endsWith('@escola.mt.gov.br')
+      );
+    }
+  }
+}
